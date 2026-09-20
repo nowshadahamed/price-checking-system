@@ -4,7 +4,7 @@ A browser-based tool that looks up product prices from multi-sheet Excel workboo
 
 It runs entirely in the browser as a single HTML file: no server, no installation, and your workbook is never uploaded anywhere.
 
-**Live demo:** https://YOUR-USERNAME.github.io/price-checking-system/
+**Live demo:** (https://nowshadahamed.github.io/price-checking-system/)
 
 <!-- After publishing, add a screenshot:
 ![Price Checking System screenshot](docs/screenshot.png) -->
@@ -30,10 +30,6 @@ It runs entirely in the browser as a single HTML file: no server, no installatio
 2. Choose your Excel workbook. The first row of every sheet must contain column names.
 3. Enter a product code in the first box, and optionally a coil count in the second box. For many codes, paste one code per line in the first box and the matching coil counts, in the same order, in the second box.
 4. Press **Show price**.
-
-**Run it locally**
-
-Download `index.html` and open it in Chrome or Edge. No build step is needed.
 
 ## Try it with the sample data
 
@@ -73,13 +69,6 @@ Grand total for these entries: **$1,111.58** (305 coils in total).
 
 All processing happens in your browser. The workbook is read locally and is never sent to a server. Do not commit real price lists to a public repository; keep the workbook on your own machine and load it through the page.
 
-## Deploy your own copy on GitHub Pages
-
-1. Create a public repository named `price-checking-system`.
-2. Upload `index.html` (and, optionally, `sample-data/` and this README).
-3. Go to **Settings → Pages**, choose **Deploy from a branch**, select `main` and the `/ (root)` folder, then save.
-4. After a minute or two the site is available at `https://YOUR-USERNAME.github.io/price-checking-system/`.
-
 ## Tech stack
 
 - HTML, CSS and vanilla JavaScript in a single file
@@ -101,14 +90,6 @@ All processing happens in your browser. The workbook is read locally and is neve
 - At most 100 codes are searched at a time.
 - Item names are shown as they appear in the workbook. Automatic English translation of names is not available on static hosting.
 
-## Development notes
-
-Built with AI-assisted development (Claude) and checked against test workbooks covering hidden cells, number formats, Excel-style rounding, bulk lookups and totals.
-
 ## Author
 
 Nowshad, Data Analyst
-
-## License
-
-MIT
