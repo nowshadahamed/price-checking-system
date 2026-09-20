@@ -1,95 +1,377 @@
 # Price Checking System
 
-A browser-based tool that looks up product prices from multi-sheet Excel workbooks. Type or paste up to 100 product codes, add coil counts, and get item names, unit prices, line totals and a grand total in one view.
+A browser-based price checking and product lookup tool designed for **BMS Company Limited**. It reads product information and prices from multi-sheet Excel workbooks and allows users to search product codes, enter coil quantities, calculate line totals, and generate a grand total instantly.
 
-It runs entirely in the browser as a single HTML file: no server, no installation, and your workbook is never uploaded anywhere.
+The system is designed to simplify price verification from large, multi-sheet BMS price-list workbooks without manually searching through individual Excel sheets.
 
-**Live demo:** (https://nowshadahamed.github.io/price-checking-system/)
-
-<!-- After publishing, add a screenshot:
-![Price Checking System screenshot](docs/screenshot.png) -->
+**Live Demo:**
+https://nowshadahamed.github.io/price-checking-system/
 
 ---
 
 ## Features
 
-- **Search every sheet at once.** Load one workbook (`.xlsx`, `.xls` or `.csv`) and search all of its visible sheets by product code.
-- **Bulk lookup.** Paste up to 100 codes from Excel (one per line, or separated by tabs, commas or semicolons). Results keep your order and show which codes were not found.
-- **Line totals and grand total.** Enter a coil count for each code in a second box and the tool shows `unit price × coils` for every item and the total of all items.
-- **Prices exactly as Excel shows them.** A cell that holds `0.371` but is formatted to show `$0.37` counts as `0.37`; a cell showing `$0.705` counts as `0.705`. Rounding follows Excel (`23.205` shown with two decimals becomes `23.21`).
-- **Messy price cells handled.** Cells such as `/9.555` or `9.555/roll` are read as `9.555`; zeros, quantities and other numbers larger than three digits are ignored.
-- **Hidden data is ignored.** Hidden sheets, hidden columns, and hidden or filtered-out rows are never counted.
-- **Works with mixed-width text.** Half-width and full-width characters (for example Japanese half-width katakana) and Bengali digits are normalised, so codes match however they were typed.
-- **Fully offline.** The Excel reader is bundled inside the page, so it works without an internet connection.
+* **Multi-sheet price lookup**
+  Load an Excel workbook and search product codes across all visible sheets.
 
-## Quick start
+* **Bulk product-code search**
+  Enter or paste multiple product codes at once. Codes can be separated by lines, tabs, commas, or semicolons.
 
-**Use the hosted page**
+* **Coil quantity calculation**
+  Enter the number of coils for each product and automatically calculate:
 
-1. Open the live demo link above.
-2. Choose your Excel workbook. The first row of every sheet must contain column names.
-3. Enter a product code in the first box, and optionally a coil count in the second box. For many codes, paste one code per line in the first box and the matching coil counts, in the same order, in the second box.
-4. Press **Show price**.
+  `Unit Price × Coil Quantity = Line Total`
 
-## Try it with the sample data
+* **Grand total calculation**
+  Automatically calculates the total value of all selected products.
 
-`sample-data/sample-prices.xlsx` is a small fictional workbook that demonstrates the rules below (it contains a hidden column, a hidden row and a hidden sheet). Paste these codes and coil counts:
+* **Excel-compatible price handling**
+  Prices are extracted from Excel while respecting displayed decimal formatting.
 
-| Code   | Coils | What the sample shows                                    | Result                    |
-| ------ | ----: | -------------------------------------------------------- | ------------------------- |
-| R-1001 |   100 | Normal price                                             | 4.38 × 100 = 438.00       |
-| R-1002 |   100 | Cell holds 0.371 but is formatted to show `$0.37`        | 0.37 × 100 = 37.00        |
-| R-1003 |    50 | Cell formatted to three decimals                         | 0.705 × 50 = 35.25        |
-| R-1004 |    10 | Price is 0, so it is not treated as a price              | Price not found           |
-| R-1999 |    10 | Row is hidden                                            | Not found                 |
-| T-2001 |    20 | Price stored as text (`/9.555`)                          | 9.555 × 20 = 191.10       |
-| T-2002 |    10 | 23.205 with a two-decimal format                         | 23.21 × 10 = 232.10       |
-| T-2003 |    25 | Three-decimal price                                      | 7.125 × 25 = 178.13       |
-| A-9001 |     5 | Sheet is hidden                                          | Not found                 |
+* **Flexible price-cell detection**
+  The system can identify prices from cells containing additional characters or text, such as:
 
-Grand total for these entries: **$1,111.58** (305 coils in total).
+  `/9.555`
+  `9.555/roll`
 
-## How the data is read
+* **Hidden data protection**
+  Hidden sheets, hidden columns, and hidden rows are excluded from price searches.
 
-| Topic | Rule |
-| --- | --- |
-| Sheets | All visible sheets are searched. Hidden sheets, hidden columns and hidden or filtered-out rows are skipped. |
-| Header row | The first non-empty row of each sheet holds the column names. |
-| Code column | Detected from the header (`code`, `sku`, `barcode`, `id`, `model`), otherwise the first column. |
-| Name column | Detected from the header (`name`, `description`, `product`, `item`, `details`), otherwise the first text column. |
-| Price | By default, the last cell in the row that contains a usable number (code and name columns excluded). Text around the number is dropped, and a number right after a `/` is preferred. A price must be above 0 and below 1000, and dates are ignored. |
-| Displayed decimals | Follows what Excel shows, with at least 2 and at most 3 decimals. |
-| Totals | Line total = displayed unit price × coils, worked out to 2 decimals. The grand total is the sum of the line totals shown. |
-| Repeated codes | A code that exists on several sheets lists every match, but only the first match counts toward the grand total (the others are flagged). |
-| Not found in the code column | The other columns are searched too. For a single code, similar codes are suggested. |
-| Overrides | The **Adjust columns** panel lets you choose the code, name and price columns for each sheet and set the currency symbol (default `$`). |
-| Memory | The last workbook is remembered in your browser's local storage, so you do not have to reload it each time. Very large workbooks may exceed the browser's storage limit and need to be loaded again. |
+* **Japanese and multilingual code matching**
+  Unicode normalization is used to improve matching between differently formatted text, including full-width and half-width characters.
+
+* **Column adjustment**
+  Users can manually select the Code, Item Name, and Price columns for individual sheets when automatic detection is not suitable.
+
+* **Currency customization**
+  The currency symbol can be configured according to the price list.
+
+* **Local processing**
+  Excel files are processed directly inside the browser and are not uploaded to an external server.
+
+* **Offline support**
+  The application is designed as a standalone HTML application and can operate without a backend server.
+
+---
+
+## Supported File Formats
+
+The system supports:
+
+* `.xlsx`
+* `.xls`
+* `.csv`
+
+The workbook may contain multiple sheets. The system searches across the visible sheets automatically.
+
+---
+
+## Quick Start
+
+### Use the Live Demo
+
+1. Open the **[Price Checking System](https://nowshadahamed.github.io/price-checking-system/)**.
+2. Select your Excel price-list workbook.
+3. Enter one or more product codes.
+4. Enter the corresponding coil quantities.
+5. Click **Show Price**.
+6. Review the product name, unit price, quantity, line total, and grand total.
+
+### Example
+
+```text
+Product Code:
+1104503200
+1105010200
+1107112211
+```
+
+```text
+Coil Quantity:
+250
+20
+90
+```
+
+The system returns the corresponding products and calculates:
+
+```text
+Unit Price × Coils = Line Total
+```
+
+---
+
+## Price Calculation
+
+For each product:
+
+```text
+Line Total = Unit Price × Coil Quantity
+```
+
+The grand total is calculated as:
+
+```text
+Grand Total = Sum of All Line Totals
+```
+
+### Example
+
+```text
+Unit Price: $4.38
+Coils: 100
+
+Line Total:
+$4.38 × 100 = $438.00
+```
+
+---
+
+## How Product Data Is Read
+
+| Data               | Processing Rule                                             |
+| ------------------ | ----------------------------------------------------------- |
+| **Sheets**         | Visible sheets are searched automatically                   |
+| **Hidden Sheets**  | Ignored                                                     |
+| **Hidden Rows**    | Ignored                                                     |
+| **Hidden Columns** | Ignored                                                     |
+| **Code Column**    | Automatically detected from common code-related headers     |
+| **Item Name**      | Automatically detected from common product/name headers     |
+| **Price Column**   | Automatically detected based on usable numeric price values |
+| **Currency**       | Configurable from the Adjust Columns panel                  |
+| **Coils**          | Entered by the user                                         |
+| **Line Total**     | Unit Price × Coils                                          |
+| **Grand Total**    | Sum of displayed line totals                                |
+
+---
+
+## Column Detection
+
+The system attempts to automatically identify the relevant columns.
+
+### Code
+
+Common headers include:
+
+```text
+Code
+SKU
+Barcode
+ID
+Model
+Product Code
+```
+
+### Item Name
+
+Common headers include:
+
+```text
+Name
+Description
+Product
+Item
+Details
+```
+
+### Price
+
+The system identifies a usable numeric value from the row while excluding the code and item-name columns.
+
+If automatic detection does not match the workbook structure, the **Adjust Columns** panel can be used to manually select the correct columns.
+
+---
+
+## Bulk Search
+
+Multiple product codes can be entered at once.
+
+Supported separators include:
+
+```text
+One code per line
+Comma
+Tab
+Semicolon
+```
+
+Example:
+
+```text
+1110433310
+1104503200
+1105010200
+1107112211
+1101012200
+```
+
+The system preserves the entered order when displaying results.
+
+---
+
+## BMS Price List Compatibility
+
+The application is designed to work with BMS multi-sheet price-list workbooks containing product information across sheets such as:
+
+```text
+PV
+PP
+Poly
+Manila / Sisal / Abaca
+Jute
+Vinylon
+Vinylon S
+Polyester
+MS
+Tora
+Kains
+Okada
+Binder
+Root Wrapping
+DCM
+and other product-specific sheets
+```
+
+This allows users to search a large price workbook without manually opening and checking each sheet.
+
+---
+
+## Handling Repeated Product Codes
+
+If the same product code appears on multiple sheets, the system can display the available matches.
+
+The first matching result is used for the primary calculation, while additional matches are identified separately.
+
+This helps prevent accidental double-counting of the same product.
+
+---
+
+## Price Formatting
+
+The system handles prices with different decimal formats.
+
+Examples:
+
+```text
+4.38
+23.20
+1.430
+8.085
+12.771
+```
+
+The displayed unit price is used when calculating the line total.
+
+For example:
+
+```text
+$1.430 × 945 = $1,351.35
+```
+
+---
 
 ## Privacy
 
-All processing happens in your browser. The workbook is read locally and is never sent to a server. Do not commit real price lists to a public repository; keep the workbook on your own machine and load it through the page.
+All workbook processing takes place locally in the user's browser.
 
-## Tech stack
+The uploaded Excel workbook is **not sent to a server** by the application.
 
-- HTML, CSS and vanilla JavaScript in a single file
-- [SheetJS Community Edition](https://sheetjs.com/) (Apache-2.0) for reading Excel files, bundled inline
-- Unicode normalisation (NFKC) for consistent code matching
+This makes the tool suitable for checking internal price-list files without requiring users to upload the workbook to an external service.
 
-```
-.
-├── index.html            # the whole application (works offline)
+> **Important:** Do not commit confidential or proprietary BMS price-list workbooks to a public GitHub repository.
+
+---
+
+## Technology Stack
+
+* **HTML5**
+* **CSS3**
+* **Vanilla JavaScript**
+* **SheetJS Community Edition**
+* **Unicode Normalization (NFKC)**
+* **GitHub Pages**
+
+The application is implemented as a lightweight browser-based tool without a backend server.
+
+---
+
+## Project Structure
+
+```text
+price-checking-system/
+│
+├── index.html
 ├── sample-data/
 │   └── sample-prices.xlsx
 └── README.md
 ```
 
+---
+
+## Deployment
+
+The project can be hosted using **GitHub Pages**.
+
+After enabling GitHub Pages, the application can be accessed through:
+
+```text
+https://nowshadahamed.github.io/price-checking-system/
+```
+
+Because the application is client-side, no server-side deployment is required.
+
+---
+
 ## Limitations
 
-- The first row of each sheet must contain column names.
-- The automatic price rule assumes the price is the last numeric cell in a row. If a sheet is laid out differently, pick the price column manually under **Adjust columns**.
-- At most 100 codes are searched at a time.
-- Item names are shown as they appear in the workbook. Automatic English translation of names is not available on static hosting.
+* The workbook should have identifiable column headers.
+* Automatic price detection may require manual adjustment for unusually structured sheets.
+* The application is primarily designed for structured BMS-style price-list workbooks.
+* Very large Excel files may require more browser memory.
+* Product names are displayed according to the source workbook.
+* Automatic translation of Japanese product names is not included.
+* Internet access is not required after the application and required libraries are available locally.
+
+---
+
+## Use Case
+
+The system is intended to make day-to-day price verification faster and more convenient by replacing repetitive manual Excel searches with a single browser-based interface.
+
+Typical workflow:
+
+```text
+Excel Price List
+       ↓
+Upload Workbook
+       ↓
+Enter Product Codes
+       ↓
+Enter Coil Quantities
+       ↓
+Search All Sheets
+       ↓
+Retrieve Product & Price
+       ↓
+Calculate Line Totals
+       ↓
+Calculate Grand Total
+```
+
+---
 
 ## Author
 
-Nowshad, Data Analyst
+**Nowshad Ahamed**
+Data Analyst & IT Professional
+Chattogram, Bangladesh
+
+* **Website:** https://nowshadahamed.github.io/
+* **GitHub:** https://github.com/nowshadahamed
+* **LinkedIn:** https://www.linkedin.com/in/nowshad-ahamed/
+
+---
+
+## License
+
+This project is intended for personal and organizational use. Please review the licensing terms of any third-party libraries included in the application before redistribution.
