@@ -314,7 +314,8 @@ var o=[];var l=Array.isArray(e);for(f=n.s.c;f<=n.e.c;++f)s[f]=ya(f);for(var c=n.
     var re = /\d+(?:\.\d+)?|\.\d+/g, m, first = null;
     while ((m = re.exec(s)) !== null) {
       var n = parseFloat(m[0]);
-      if (!validPrice(n)) continue;
+      if (!validPrice(n)) continue; 
+      var after = s.charAt(m.index + m[0].length); if (after && !/[\s\/]/.test(after)) continue; // "$1.79でない" is a note, not a price
       var hit = { n: n, d: decimalsOf(m[0]) };
       if (/\/\s*$/.test(s.slice(0, m.index))) return hit;
       if (first === null) first = hit;
