@@ -5,7 +5,7 @@ A browser-based price checking and product lookup tool designed for **BMS Compan
 The system is designed to simplify price verification from large, multi-sheet BMS price-list workbooks without manually searching through individual Excel sheets.
 
 **Live Demo:**
-https://nowshadahamed.github.io/price-checking-system/
+https://price-checking-bms.nowshad-ict.workers.dev
 
 ---
 
